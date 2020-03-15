@@ -7,19 +7,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
+    steps:    
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Build Number Generator
+      uses: einaregilsson/build-number@v2
       with:
-        dotnet-version: 3.1.101
-    - name: Build with dotnet
-      run: dotnet build src --configuration Release
+        token: ${{secrets.github_token}}
+    - name: print
+      run: echo "$BUILD_NUMBER"
+    #- name: Setup .NET Core
+     # uses: actions/setup-dotnet@v1
+      #with:
+       # dotnet-version: 3.1.101
+    #- name: Build with dotnet
+     # run: dotnet build src --configuration Release
   
-  deploy:
-    needs: [build]
-    runs-on: [ubuntu-latest]
-    steps:
-      - uses: action/checkout@v2
-      - name: Push package to nuget
-        run: dotnet nuget push **/*.nupkg --api-key ${{secrets.NUGET_DEPLOY_KEY}} --source https://api.nuget.org/v3/index.json
+#  deploy:
+#    needs: [build]
+#    runs-on: [ubuntu-latest]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Push package to nuget
+#        run: dotnet nuget push **/*.nupkg --api-key ${{secrets.NUGET_DEPLOY_KEY}} --source https://api.nuget.org/v3/index.json
