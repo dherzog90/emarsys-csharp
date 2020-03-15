@@ -16,7 +16,7 @@ jobs:
         with:
          dotnet-version: 3.1.101
       - name: Build with dotnet
-        run: dotnet build src --configuration Release -p:Version=${{env.major}}.${{env.minor}}.${{github.workflow}}.${{github.run_id}}
+        run: dotnet build src -p:Version=${{env.major}}.${{env.minor}}.${{github.run_number}} --configuration Release 
           
 #  deploy:
 #    needs: [build]
