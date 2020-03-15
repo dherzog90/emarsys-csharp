@@ -1,4 +1,7 @@
 name: .NET Core
+env:
+  major: 1
+  minor: 0
 
 on:
   push:
@@ -7,21 +10,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:    
-    - uses: actions/checkout@v2
-    - name: Build Number Generator
-      uses: einaregilsson/build-number@v2
-      with:
-        token: ${{secrets.github_token}}
-    - name: print
-      run: echo "$BUILD_NUMBER"
-    #- name: Setup .NET Core
-     # uses: actions/setup-dotnet@v1
-      #with:
-       # dotnet-version: 3.1.101
-    #- name: Build with dotnet
-     # run: dotnet build src --configuration Release
-  
+    steps:        
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+         dotnet-version: 3.1.101
+      - name: Build with dotnet
+        run: dotnet build src --configuration Release -p:Version=${{env.major}}.${{env.minor}}.${{github.workflow}}.${{github.run_id}}
+          
 #  deploy:
 #    needs: [build]
 #    runs-on: [ubuntu-latest]
