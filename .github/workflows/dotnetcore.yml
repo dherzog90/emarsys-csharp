@@ -1,4 +1,7 @@
 name: .NET Core
+env:
+  major: 1
+  minor: 0
 
 on:
   push:
@@ -7,19 +10,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-    - name: Build with dotnet
-      run: dotnet build src --configuration Release
-  
-  deploy:
-    needs: [build]
-    runs-on: [ubuntu-latest]
-    steps:
-      - uses: action/checkout@v2
-      - name: Push package to nuget
-        run: dotnet nuget push **/*.nupkg --api-key ${{secrets.NUGET_DEPLOY_KEY}} --source https://api.nuget.org/v3/index.json
+    steps:        
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+         dotnet-version: 3.1.101
+      - name: Build with dotnet
+        run: dotnet build src -p:Version=${{env.major}}.${{env.minor}}.${{github.run_number}} --configuration Release 
+          
+#  deploy:
+#    needs: [build]
+#    runs-on: [ubuntu-latest]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Push package to nuget
+#        run: dotnet nuget push **/*.nupkg --api-key ${{secrets.NUGET_DEPLOY_KEY}} --source https://api.nuget.org/v3/index.json
